@@ -11,9 +11,9 @@ jobs:
     - stage: "Veracode SAST - Sandbox Scan"
       name: "Veracode SAST - Sandbox Scan"
       before_script:
-        - wget https://repo1.maven.org/maven2/com/veracode/vosp/api/wrappers/vosp-api-wrappers-java/$VERACODE_WRAPPER_VERSION/vosp-api-wrappers-java-$VERACODE_WRAPPER_VERSION.jar
+        - wget -q -O veracode-wrapper-api.jar https://search.maven.org/remotecontent?filepath=com/veracode/vosp/api/wrappers/vosp-api-wrappers-java/21.9.8.2/vosp-api-wrappers-java-21.9.8.2.jar
       script: |
-        - java -jar vosp-api-wrappers-java-$VERACODE_WRAPPER_VERSION.jar 
+        - java -jar veracode-wrapper-api.jar 
           -vid $VERACODE_ID 
           -vkey $VERACODE_KEY 
           -action uploadandscan 
