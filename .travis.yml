@@ -5,9 +5,11 @@ env:
 
 jobs:
   inclue:
-    - stage: "security_application"
+    - stage: "build java with maven"
       name: "build"
       script: mvn clean package
     - stage: "build test"
       name: "test war"
-      script: ls -l target | grep --color=always verademo verademo.war
+      script: 
+        - ls -l
+        - ls -l target 
