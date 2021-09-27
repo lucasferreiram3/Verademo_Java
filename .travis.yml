@@ -13,3 +13,10 @@ jobs:
       script: 
         - ls -l
         - ls -l target
+    - stage: "Veracode SAST - Pipeline Scan"
+      name: "Veracode SAST - Pipeline Scan"
+      before_script:
+        - curl -sSO https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
+        - unzip -o pipeline-scan-LATEST.zip
+      script:
+        - java -jar pipeline-scan.jar -vid $(VERACODE_ID) -vkey $(VERACODE_KEY) -f target/verademo.war --isue_details
