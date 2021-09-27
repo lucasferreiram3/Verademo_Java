@@ -5,18 +5,17 @@ env:
 
 jobs:
   inclue:
-    - stage: "build java with maven"
+    - stage: "Build Java app with Maven"
       name: "build"
       script: mvn clean package
-    - stage: "build test"
-      name: "test war"
+    - stage: "Veracode SCA - Software Composition Analisys"
+      name: "Veracode SCA - Software Composition Analisys"
       script: 
-        - ls -l
-        - ls -l target
+        - curl -sSL https://download.sourceclear.com/ci.sh | bash -s scan  --update-advisor || true
     - stage: "Veracode SAST - Pipeline Scan"
       name: "Veracode SAST - Pipeline Scan"
       before_script:
         - curl -sSO https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
         - unzip -o pipeline-scan-LATEST.zip
       script:
-        - java -jar pipeline-scan.jar -vid $VERACODE_ID -vkey $VERACODE_KEY -f target/verademo.war --issue_details true
+        - java -jar pipeline-scan.jar -vid $VERACODE_ID -vkey $VERACODE_KEY -f target/verademo.war --issue_details true || true
