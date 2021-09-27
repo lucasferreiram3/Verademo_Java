@@ -12,4 +12,4 @@ jobs:
       name: "test war"
       script: 
         - ls -l
-        - ls -l target 
+        - ls -l target
