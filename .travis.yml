@@ -3,9 +3,11 @@ language: java
 env:
   - DATE = `date + "%Y-%m-%d-%H%M"`
 
-before_install:
-  - mvn clean package
-
-script:
-  - ls -lah
-  - ls -l /target
+jobs:
+  inclue:
+    - stage: "security_application"
+      name: "build"
+      script: mvn clean package
+    - stage: "build test"
+      name: "test war"
+      script: ls -l target | grep --color=always verademo verademo.war
