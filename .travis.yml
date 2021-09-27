@@ -19,4 +19,4 @@ jobs:
         - curl -sSO https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
         - unzip -o pipeline-scan-LATEST.zip
       script:
-        - java -jar pipeline-scan.jar -vid $VERACODE_ID -vkey $VERACODE_KEY -f target/verademo.war --issue_details
+        - java -jar pipeline-scan.jar -vid $VERACODE_ID -vkey $VERACODE_KEY -f target/verademo.war --issue_details true
