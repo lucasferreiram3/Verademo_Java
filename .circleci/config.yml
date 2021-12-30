@@ -43,7 +43,8 @@ jobs:
       - run:
           name: "Veracode Software Composition Analysis"
           command: |
-            curl -sSL https://download.sourceclear.com/ci.sh | bash -s -scan --update-advisor || true
+            export EXTRA_ARGS='--update-advisor'
+            curl -sSL https://download.sourceclear.com/ci.sh | bash -s – scan $EXTRA_ARGS || true
 workflows:
   version: 2.1
   build_and_scan:
@@ -52,4 +53,6 @@ workflows:
       - veracode_sast_pipeline_scan:
           requires:
             - build
-      - veracode_sca
+      - veracode_sca:
+          requires:
+            - build
