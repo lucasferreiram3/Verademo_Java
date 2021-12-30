@@ -10,7 +10,7 @@ jobs:
       - run:
           name: Run Maven
           command: | 
-            'mvn compile package'
+            mvn package
             ls -lah /target | grep '*.war'
       # keep the files around for the scan job
       - persist_to_workspace:
