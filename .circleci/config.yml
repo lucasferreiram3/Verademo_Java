@@ -11,7 +11,7 @@ jobs:
           name: Run Maven
           command: | 
             mvn package
-            ls -lah
+            ls -l target
       
       # keep the files around for the scan job
       - persist_to_workspace:
