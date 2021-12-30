@@ -20,6 +20,19 @@ jobs:
             - target
             - ./
 
+  veracode_sca:
+    docker:
+      - image: cimg/openjdk:8.0.282-node
+    working_directory: ./
+    steps:
+      - attach_workspace:
+          at: ./
+      - run:
+          name: "Veracode Software Composition Analysis"
+          command: |
+            export EXTRA_ARGS='--update-advisor'
+            curl -sSL https://download.sourceclear.com/ci.sh | bash -s – scan $EXTRA_ARGS || true
+
   veracode_sast_pipeline_scan:
     docker: 
       - image: veracode/pipeline-scan:latest
@@ -33,26 +46,40 @@ jobs:
          command: |
            java -jar /opt/veracode/pipeline-scan.jar -vid $V_ID -vkey $V_KEY -f ./target/verademo.war --json_output_file="baseline.json" --fail_on_severity="Very High, High"
 
-  veracode_sca:
+  veracode_sast_sandbox_scan:
     docker:
-      - image: cimg/openjdk:8.0.282-node
-    working_directory: ./
+      - image: veracode/api-wrapper-java
+    working_directory: ~/target
     steps:
       - attach_workspace:
           at: ./
       - run:
-          name: "Veracode Software Composition Analysis"
-          command: |
-            export EXTRA_ARGS='--update-advisor'
-            curl -sSL https://download.sourceclear.com/ci.sh | bash -s – scan $EXTRA_ARGS || true
+          name: "Run Veracode SAST Sandbox Scan"
+          command: java -jar veracode-wrapper.jar 
+              -vid $V_ID
+              -vkey $V_KEY
+              -action uploadandscan 
+              -appname "Java-VeraDemo"
+              -createprofile false
+              -version CircleCI-$CIRCLE_JOB-$CIRCLE_BUILD_NUM 
+              -filepath ./target/verademo.war
+              -createsandbox false 
+              -sandboxname "SANDBOX_1" 
+              -deleteincompletescan true 
+              -scanpollinginterval 60
+              -scantimeout 60
+
 workflows:
   version: 2.1
   build_and_scan:
     jobs:
       - build
+      - veracode_sca:
+          requires:
+            - build
       - veracode_sast_pipeline_scan:
           requires:
             - build
-      - veracode_sca:
+      - veracode_sast_sandbox_scan:
           requires:
             - build
