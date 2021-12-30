@@ -19,9 +19,11 @@ jobs:
           paths:
             - target
             - ./
+
   pipeline_scan:
     docker: 
-      - image: veracode/pipeline-scan:latest  
+      - image: veracode/pipeline-scan:latest
+    working_directory: ~/target
     steps:
       # get the files from the previous job
       - attach_workspace:
@@ -30,3 +32,12 @@ jobs:
          name: "Run Veracode Pipeline Scan and create a baseline"
          command: |
            java -jar pipeline-scan.jar -vid $V_ID -vkey $V_KEY -f ./target/verademo.war --json_output_file="baseline.json" --fail_on_severity="Very High, High"
+
+workflows:
+  version: 2.1
+  build_and_scan:
+    jobs:
+      - build
+      - pipeline_scan:
+          requires:
+            - build
