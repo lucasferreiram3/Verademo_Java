@@ -55,7 +55,7 @@ jobs:
           at: ./
       - run:
           name: "Run Veracode SAST Sandbox Scan"
-          command: java -jar veracode-wrapper.jar 
+          command: java -jar /opt/veracode/veracode-wrapper.jar 
               -vid $V_ID
               -vkey $V_KEY
               -action uploadandscan 
