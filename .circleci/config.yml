@@ -20,7 +20,7 @@ jobs:
             - target
             - ./
 
-  pipeline_scan:
+  veracode_sast_pipeline_scan:
     docker: 
       - image: veracode/pipeline-scan:latest
     working_directory: ~/target
@@ -33,11 +33,23 @@ jobs:
          command: |
            java -jar /opt/veracode/pipeline-scan.jar -vid $V_ID -vkey $V_KEY -f ./target/verademo.war --json_output_file="baseline.json" --fail_on_severity="Very High, High"
 
+  veracode_sca:
+    docker:
+      - image: cimg/openjdk:8.0.282-node
+    working_directory: ./
+    steps:
+      - attach_workspace:
+          at: ./
+      - run:
+          name: "Veracode Software Composition Analysis"
+          command: |
+            curl -sSL https://download.sourceclear.com/ci.sh | bash -s -scan --update-advisor || true
 workflows:
   version: 2.1
   build_and_scan:
     jobs:
       - build
-      - pipeline_scan:
+      - veracode_sast_pipeline_scan:
           requires:
             - build
+      - veracode_sca
