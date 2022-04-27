@@ -31,7 +31,7 @@ jobs:
           name: "Veracode Software Composition Analysis"
           command: |
             export EXTRA_ARGS='--update-advisor'
-            curl -sSL https://download.sourceclear.com/ci.sh | bash -s – scan $EXTRA_ARGS || true
+            curl -sSL https://download.sourceclear.com/ci.sh | bash -s – scan $EXTRA_ARGS
 
   veracode_sast_pipeline_scan:
     docker: 
