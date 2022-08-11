@@ -44,7 +44,7 @@ jobs:
       - run:
          name: "Run Veracode Pipeline Scan and create a baseline"
          command: |
-           java -jar /opt/veracode/pipeline-scan.jar -vid $V_ID -vkey $V_KEY -f ./target/verademo.war --json_output_file="baseline.json" --fail_on_severity="Very High"
+           java -jar /opt/veracode/pipeline-scan.jar -vid $V_ID -vkey $V_KEY -f ./target/verademo.war --json_output_file="baseline.json" --issue_dealis true
 
   veracode_sast_policy_scan:
     docker:
@@ -64,7 +64,7 @@ jobs:
               -version CircleCI-$CIRCLE_JOB-$CIRCLE_BUILD_NUM 
               -filepath ./target/verademo.war 
               -deleteincompletescan true 
-              -scanpollinginterval 60
+              -scanpollinginterval 120
               -scantimeout 60
 
 workflows:
