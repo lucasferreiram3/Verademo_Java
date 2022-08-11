@@ -44,7 +44,7 @@ jobs:
       - run:
          name: "Run Veracode Pipeline Scan and create a baseline"
          command: |
-           java -jar /opt/veracode/pipeline-scan.jar -vid $V_ID -vkey $V_KEY -f ./target/verademo.war --json_output_file="baseline.json" --issue_dealis true
+           java -jar /opt/veracode/pipeline-scan.jar -vid $V_ID -vkey $V_KEY -f ./target/verademo.war --json_output_file="baseline.json" --issue_details true || true
 
   veracode_sast_policy_scan:
     docker:
@@ -81,3 +81,4 @@ workflows:
       - veracode_sast_policy_scan:
           requires:
             - build
+            - veracode_sast_pipeline_scan
