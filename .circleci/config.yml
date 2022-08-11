@@ -48,7 +48,7 @@ jobs:
 
   veracode_sast_policy_scan:
     docker:
-      - image: veracode/api-wrapper-java
+      - image: veracode/api-wrapper-java:latest
     working_directory: ~/target
     steps:
       - attach_workspace:
