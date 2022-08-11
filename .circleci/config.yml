@@ -46,7 +46,7 @@ jobs:
          command: |
            java -jar /opt/veracode/pipeline-scan.jar -vid $V_ID -vkey $V_KEY -f ./target/verademo.war --json_output_file="baseline.json" --fail_on_severity="Very High"
 
-  veracode_sast_sandbox_scan:
+  veracode_sast_policy_scan:
     docker:
       - image: veracode/api-wrapper-java
     working_directory: ~/target
@@ -62,9 +62,7 @@ jobs:
               -appname "Java-VeraDemo"
               -createprofile false
               -version CircleCI-$CIRCLE_JOB-$CIRCLE_BUILD_NUM 
-              -filepath ./target/verademo.war
-              -createsandbox false 
-              -sandboxname "SANDBOX_1" 
+              -filepath ./target/verademo.war 
               -deleteincompletescan true 
               -scanpollinginterval 60
               -scantimeout 60
@@ -80,6 +78,6 @@ workflows:
       - veracode_sast_pipeline_scan:
           requires:
             - build
-      - veracode_sast_sandbox_scan:
+      - veracode_sast_policy_scan:
           requires:
             - build
