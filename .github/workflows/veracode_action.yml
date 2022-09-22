@@ -27,6 +27,7 @@ jobs:
   Veracode_Pipeline_Scan:
     name: Veracode Pipeline Scan
     runs-on: ubuntu-latest
+    needs: [build]
     container:
       image: veracode/pipeline-scan:latest
       options: --user root
