@@ -52,5 +52,5 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: filtered-results
-          path: filtered_results.json
+          path: filtered_results.json 
       
