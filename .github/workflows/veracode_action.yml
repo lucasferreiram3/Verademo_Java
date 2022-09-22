@@ -22,7 +22,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
           name: target/
-          path: target/
+          path: target/verademo.war
   
   Veracode_Pipeline_Scan:
     name: Veracode Pipeline Scan
@@ -37,14 +37,14 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: target
-          path: target/
+          path: target/verademo.war
       
       - name: scan
         run: |
           java -jar /opt/veracode/pipeline-scan.jar \
               -vid ${{ secrets.VID }}   \
               -vkey ${{ secrets.VKEY }} \
-              --file /target/verademo.war
+              --file target/verademo.war
         continue-on-error: true
         
       - name: save filtered results file
