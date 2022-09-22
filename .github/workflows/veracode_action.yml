@@ -46,11 +46,5 @@ jobs:
               -vid ${{ secrets.VID }}   \
               -vkey ${{ secrets.VKEY }} \
               --file target/verademo.war
-        continue-on-error: true
-        
-      - name: save filtered results file
-        uses: actions/upload-artifact@v2
-        with:
-          name: filtered-results
-          path: filtered_results.json 
+
       
