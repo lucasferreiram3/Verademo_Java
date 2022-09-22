@@ -16,12 +16,13 @@ jobs:
     - name: Build with Maven
       run: |
         mvn package
+        pwd
         ls -l target/
         
     - name: Salvando artefato
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
-          name: target/
+          name: artefato
           path: target/verademo.war
   
   Veracode_Pipeline_Scan:
