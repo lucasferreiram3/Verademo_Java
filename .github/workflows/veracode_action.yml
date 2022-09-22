@@ -17,4 +17,38 @@ jobs:
       run: |
         mvn package
         ls -l target/
+        
+    - name: Salvando artefato
+      uses: actions/upload-artifact@v2
+      with:
+          name: target/
+          path: target/
+  
+  Veracode_Pipeline_Scan:
+    name: Veracode Pipeline Scan
+    runs-on: ubuntu-latest
+    container:
+      image: veracode/pipeline-scan:latest
+      options: --user root
+      
+    steps:
+      - name: get archive
+        uses: actions/download-artifact@v2
+        with:
+          name: target
+          path: target/
+      
+      - name: scan
+        run: |
+          java -jar /opt/veracode/pipeline-scan.jar \
+              -vid ${{ secrets.VID }}   \
+              -vkey ${{ secrets.VKEY }} \
+              --file /target/verademo.war
+        continue-on-error: true
+        
+      - name: save filtered results file
+        uses: actions/upload-artifact@v2
+        with:
+          name: filtered-results
+          path: filtered_results.json
       
