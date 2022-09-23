@@ -42,7 +42,7 @@ jobs:
       
       - name: scan
         run: |
-          ls -l
+          cd target
           java -jar /opt/veracode/pipeline-scan.jar \
               -vid ${{ secrets.VID }}   \
               -vkey ${{ secrets.VKEY }} \
