@@ -42,18 +42,17 @@ jobs:
       
       - name: scan
         run: |
-          cd target
           java -jar /opt/veracode/pipeline-scan.jar \
               -vid ${{ secrets.VID }}   \
               -vkey ${{ secrets.VKEY }} \
-              --file verademo.war
+              --file target/verademo.war
         continue-on-error: true
 
       - name: save filtered results file
         uses: actions/upload-artifact@v3
         with:
           name: filtered-results
-          path: /target/filtered_results.json
+          path: filtered_results.json
           
 # This step will import the flaws from the step above
   Import_Pipeline_Scan_Issues:
