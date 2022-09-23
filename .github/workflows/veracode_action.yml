@@ -38,7 +38,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: artefato
-          path: /target/verademo.war
+          path: /home/runner/work/Verademo_Java/Verademo_Java/target/verademo.war
       
       - name: scan
         run: |
