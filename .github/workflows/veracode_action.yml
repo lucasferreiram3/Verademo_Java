@@ -17,13 +17,13 @@ jobs:
       run: |
         mvn package
         pwd
-        ls -l target/
+        ls -l 
         
     - name: Salvando artefato
       uses: actions/upload-artifact@v3
       with:
           name: artefato
-          path: /target/verademo.war
+          path: /home/runner/work/Verademo_Java/Verademo_Java/target/verademo.war
   
   Veracode_Pipeline_Scan:
     name: Veracode Pipeline Scan
@@ -45,6 +45,6 @@ jobs:
           java -jar /opt/veracode/pipeline-scan.jar \
               -vid ${{ secrets.VID }}   \
               -vkey ${{ secrets.VKEY }} \
-              --file /target/verademo.war
+              --file  /home/runner/work/Verademo_Java/Verademo_Java/target/verademo.war
 
       
