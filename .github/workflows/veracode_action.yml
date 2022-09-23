@@ -42,9 +42,10 @@ jobs:
       
       - name: scan
         run: |
+          ls -l
           java -jar /opt/veracode/pipeline-scan.jar \
               -vid ${{ secrets.VID }}   \
               -vkey ${{ secrets.VKEY }} \
-              --file  /home/runner/work/Verademo_Java/Verademo_Java/target/verademo.war
+              --file /target/verademo.war
 
       
