@@ -50,10 +50,10 @@ jobs:
         continue-on-error: true
 
       - name: save filtered results file
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: filtered-results
-          path: filtered_results.json
+          path: /target/filtered_results.json
           
 # This step will import the flaws from the step above
   Import_Pipeline_Scan_Issues:
@@ -61,7 +61,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: get scan results
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: filtered-results
 
