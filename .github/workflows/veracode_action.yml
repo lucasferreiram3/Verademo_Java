@@ -47,5 +47,26 @@ jobs:
               -vid ${{ secrets.VID }}   \
               -vkey ${{ secrets.VKEY }} \
               --file verademo.war
+        continue-on-error: true
 
-      
+      - name: save filtered results file
+        uses: actions/upload-artifact@v2
+        with:
+          name: filtered-results
+          path: filtered_results.json
+          
+# This step will import the flaws from the step above
+  Import_Pipeline_Scan_Issues:
+    needs: Veracode_Pipeline_Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: get scan results
+        uses: actions/download-artifact@v2
+        with:
+          name: filtered-results
+
+      - name: import flaws as issues
+        uses: buzzcode/veracode-flaws-to-issues@v1
+        with:
+          scan-results-json: 'filtered_results.json'
+          github-token: ${{ secrets.TOKEN_GITHUB }}
