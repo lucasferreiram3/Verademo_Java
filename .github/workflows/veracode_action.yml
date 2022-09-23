@@ -23,7 +23,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
           name: artefato
-          path: /Verademo_Java/target/
+          path: /target
   
   Veracode_Pipeline_Scan:
     name: Veracode Pipeline Scan
@@ -38,14 +38,14 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: artefato
-          path: /Verademo_Java/target/
+          path: /target
       
       - name: scan
         run: |
-          
+          cd target
           java -jar /opt/veracode/pipeline-scan.jar \
               -vid ${{ secrets.VID }}   \
               -vkey ${{ secrets.VKEY }} \
-              --file /target/verademo.war
+              --file verademo.war
 
       
