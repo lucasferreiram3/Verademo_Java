@@ -1,1 +1,47 @@
+name: security-check-treinamento
+on:
+  push:
+    branches: [treinamento]
 
+jobs:
+  build:
+    name: Build Maven
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up JDK 1.8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+    - name: Build with Maven
+      run: |
+        mvn clean package install
+        pwd
+        ls -l  
+    - name: Salvando artefato
+      uses: actions/upload-artifact@v3
+      with:
+          name: verademo.war
+          path: target/verademo.war
+  
+  Veracode_Policy_Scan:
+    name: Veracode Policy Scan
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
+      - uses: actions/checkout@v2
+      - name: get archive
+        uses: actions/download-artifact@v3
+        with:
+          name: verademo.war
+          path: .
+      - name: Veracode Policy Scan
+        uses: veracode/veracode-uploadandscan-action@0.2.4
+        with:
+          appname: 'Java-VeraDemo'
+          createprofile: false
+          filepath: 'target/verademo.war'
+          vid: '${{ secrets.VID }}'
+          vkey: '${{ secrets.VKEY }}'
+          deleteincompletescan: 2
+          scantimeout: 15
