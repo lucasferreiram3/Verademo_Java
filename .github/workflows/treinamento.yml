@@ -39,10 +39,14 @@ jobs:
       - name: Run SCA Scan
         env:
           SRCCLR_API_TOKEN: ${{ secrets.SRCCLR_API_TOKEN }}
+          SRCCLR_SCM_TOKEN: ${{ secrets.SRCCLR_SCM_TOKEN }}
         run: |
+          git config --global user.email "lucas.ferreira@m3corp.com.br"
+          git config --global user.name "lucasferreiram3"
+
           export EXTRA_ARGS='--update-advisor --pull-request'
           export SRCCLR_SCM_TYPE="GITHUB"
-          export SRCCLR_SCM_TOKEN=${{ secrets.SRCCLR_API_TOKEN }}
+          export SRCCLR_SCM_TOKEN=${{ secrets.SRCCLR_SCM_TOKEN }}
           export SRCCLR_PR_ON=high
           export SRCCLR_NO_BREAKING_UPDATES=true
           export SRCCLR_IGNORE_CLOSED_PRS=false
