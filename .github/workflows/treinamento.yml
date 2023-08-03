@@ -1,1 +1,55 @@
+name: treinamento
+on:
+  push:
+    branches: [ SCA-Auto-remediation ]
+  pull_request:
+    branches: [ SCA-Auto-remediation ]
 
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build Maven
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up JDK 1.8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+    - name: Build with Maven
+      run: |
+        mvn clean package install
+        pwd
+        ls -l  target/
+    - name: Salvando artefato
+      uses: actions/upload-artifact@v3
+      with:
+          name: verademo.war
+          path: target/verademo.war
+  
+  Veracode_Software_Composition_Analisys:
+    runs-on: ubuntu-latest
+    name: Veracode SCA Scan
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        # define as variaveis ambiente com valores para os relatórios do SCA
+        # Baixa o script SCA para executar o scan
+      - name: Run SCA Scan
+        env:
+          SRCCLR_API_TOKEN: ${{ secrets.SRCCLR_API_TOKEN }}
+        run: |
+          export EXTRA_ARGS='--update-advisor --pull-request'
+          export SRCCLR_SCM_TYPE="GITHUB"
+          export SRCCLR_SCM_TOKEN=${{ secrets.SRCCLR_API_TOKEN }}
+          export SRCCLR_PR_ON=high
+          export SRCCLR_NO_BREAKING_UPDATES=true
+          export SRCCLR_IGNORE_CLOSED_PRS=false
+          export SRCCLR_SCM_URL=https://github.com/lucasferreiram3/verademo-java-web.git
+          
+          export SRCCLR_SCM_REF=${{ github.workflow }}
+          export SRCCLR_SCM_REF_TYPE="branch"
+          export SRCCLR_SCM_REV=${{ github.run_id }}
+          
+          curl -sSL https://download.sourceclear.com/ci.sh | bash -s scan $EXTRA_ARGS
