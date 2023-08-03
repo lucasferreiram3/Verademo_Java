@@ -1,9 +1,9 @@
 name: treinamento
 on:
   push:
-    branches: [ SCA-Auto-remetiation ]
+    branches: [ SCA-Auto-remediation ]
   pull_request:
-    branches: [ SCA-Auto-remetiation ]
+    branches: [ SCA-Auto-remediation ]
 
   workflow_dispatch:
 
