@@ -1,7 +1,11 @@
 name: treinamento
 on:
   push:
-    branches: [treinamento]
+    branches: [ SCA-Auto-remetiation ]
+  pull_request:
+    branches: [ SCA-Auto-remetiation ]
+
+  workflow_dispatch:
 
 jobs:
   build:
@@ -17,31 +21,35 @@ jobs:
       run: |
         mvn clean package install
         pwd
-        ls -l  
+        ls -l  target/
     - name: Salvando artefato
       uses: actions/upload-artifact@v3
       with:
           name: verademo.war
           path: target/verademo.war
   
-  Veracode_Policy_Scan:
-    name: Veracode Policy Scan
+  Veracode_Software_Composition_Analisys:
     runs-on: ubuntu-latest
-    needs: [build]
+    name: Veracode SCA Scan
     steps:
-      - uses: actions/checkout@v2
-      - name: get archive
-        uses: actions/download-artifact@v3
-        with:
-          name: verademo.war
-          path: target/verademo.war
-      - name: Veracode Policy Scan
-        uses: veracode/veracode-uploadandscan-action@0.2.4
-        with:
-          appname: 'Java-VeraDemo'
-          createprofile: false
-          filepath: 'target/verademo.war'
-          vid: '${{ secrets.VID }}'
-          vkey: '${{ secrets.VKEY }}'
-          deleteincompletescan: 2
-          scantimeout: 15
+      - name: Checkout
+        uses: actions/checkout@v3
+        # define as variaveis ambiente com valores para os relatórios do SCA
+        # Baixa o script SCA para executar o scan
+      - name: Run SCA Scan
+        env:
+          SRCCLR_API_TOKEN: ${{ secrets.SRCCLR_API_TOKEN }}
+        run: |
+          export EXTRA_ARGS='--update-advisor --pull-request'
+          export SRCCLR_SCM_TYPE="GITHUB"
+          export SRCCLR_SCM_TOKEN=${{ secrets.SRCCLR_API_TOKEN }}
+          export SRCCLR_PR_ON=methods
+          export SRCCLR_NO_BREAKING_UPDATES=true
+          export SRCCLR_IGNORE_CLOSED_PRS=false
+          export SRCCLR_SCM_URL=https://github.com/lucasferreiram3/verademo-java-web.git
+          
+          export SRCCLR_SCM_REF=${{ github.workflow }}
+          export SRCCLR_SCM_REF_TYPE="branch"
+          export SRCCLR_SCM_REV=${{ github.run_id }}
+          
+          curl -sSL https://download.sourceclear.com/ci.sh | bash -s scan $EXTRA_ARGS
