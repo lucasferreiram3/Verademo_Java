@@ -10,8 +10,8 @@
  
   <!-- Component Version Properties -->
   <properties>
-    <spring.version>3.2.15.RELEASE</spring.version>
-    <fileupload.version>1.3.2</fileupload.version>
+    <spring.version>4.3.20.RELEASE</spring.version>
+    <fileupload.version>1.5</fileupload.version>
     <mysql.version>5.1.35</mysql.version>
   </properties>
   
