@@ -34,8 +34,8 @@ pipeline {
                     sandboxName: 'SANDBOX_1',
                     scanName: '${BUILD_TIMESTAMP} - ${BUILD_NUMBER}', 
                     uploadIncludesPattern: '**/**.war', 
-                    vid: "${VID}", 
-                    vkey: "${VKEY}"         
+                    vid: '${VID}', 
+                    vkey: '${VKEY}'         
                 }
             }
         }
@@ -50,8 +50,8 @@ pipeline {
                     deleteIncompleteScan: true, 
                     scanName: '${BUILD_TIMESTAMP} - ${BUILD_NUMBER}', 
                     uploadIncludesPattern: '**/**.war', 
-                    vid: "${VID}", 
-                    vkey: "${VKEY}", 
+                    vid: '${VID}', 
+                    vkey: '${VKEY}', 
                     waitForScan: false
                 }
             }
