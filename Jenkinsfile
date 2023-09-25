@@ -26,7 +26,7 @@ pipeline {
 
         stage('Veracode SAST - Sandbox Scan') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'veracode_credentials', passwordVariable: 'VKEY', usernameVariable: 'VID')]) {
+                withCredentials([usernamePassword(credentialsId: 'veracode-credentials', passwordVariable: 'VKEY', usernameVariable: 'VID')]) {
                     veracode applicationName: 'Java-VeraDemo',
                     criticality: 'VeryHigh', 
                     deleteIncompleteScan: 2,
@@ -42,7 +42,7 @@ pipeline {
 
         stage('Veracode SAST - Policy Scan') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'veracode_credentials', passwordVariable: 'VKEY', usernameVariable: 'VID')]) {
+                withCredentials([usernamePassword(credentialsId: 'veracode-credentials', passwordVariable: 'VKEY', usernameVariable: 'VID')]) {
                     veracode applicationName: 'Java-VeraDemo',
                     canFailJob: false,
                     criticality: 'VeryHigh', 
