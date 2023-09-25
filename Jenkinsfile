@@ -26,7 +26,7 @@ pipeline {
 
         stage('Veracode SAST - Sandbox Scan') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'veracode-credentials', passwordVariable: 'VKEY', usernameVariable: 'VID')]) {
+                withCredentials([string(credentialsId: 'VID', variable: 'VID'), string(credentialsId: 'VKEY', variable: 'VKEY')]) {
                     veracode applicationName: 'Java-VeraDemo',
                     criticality: 'VeryHigh', 
                     deleteIncompleteScan: 2,
@@ -34,8 +34,8 @@ pipeline {
                     sandboxName: 'SANDBOX_1',
                     scanName: '${BUILD_TIMESTAMP} - ${BUILD_NUMBER}', 
                     uploadIncludesPattern: '**/**.war', 
-                    vid: $(VID), 
-                    vkey: $(VKEY)         
+                    vid: "${VID}", 
+                    vkey: "${VKEY}"         
                 }
             }
         }
