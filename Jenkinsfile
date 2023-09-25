@@ -27,7 +27,7 @@ pipeline {
        stage('Veracode SAST - Sandbox Scan') { 
             steps {
                 withCredentials([usernamePassword(credentialsId: 'veracode-credentials', passwordVariable: 'VKEY', usernameVariable: 'VID')]) {
-                    veracode applicationName: 'Java-VeraDemo', createSandbox: true, criticality: 'VeryHigh', deleteIncompleteScanLevel: '0', fileNamePattern: '', replacementPattern: '', sandboxName: 'SANDBOX_1', scanExcludesPattern: '', scanIncludesPattern: '', scanName: '"${BUILD_NUMBER}"', teams: '', uploadIncludesPattern: '**/**.war', vid: "${VID}", vkey: "${VKEY}"      
+                    veracode applicationName: 'Java-VeraDemo', createSandbox: true, criticality: 'VeryHigh', deleteIncompleteScanLevel: '2', sandboxName: 'SANDBOX_1', scanName: '"${BUILD_TIMESTAMP} - ${BUILD_NUMBER}"', uploadIncludesPattern: '**/**.war', vid: "${VID}", vkey: "${VKEY}"      
                 }
             }
         }
@@ -35,7 +35,7 @@ pipeline {
         stage('Veracode SAST - Policy Scan') { 
             steps {
                 withCredentials([usernamePassword(credentialsId: 'veracode-credentials', passwordVariable: 'VKEY', usernameVariable: 'VID')]) {
-                    veracode applicationName: 'Java-VeraDemo', criticality: 'VeryHigh', deleteIncompleteScanLevel: '0', fileNamePattern: '', replacementPattern: '', sandboxName: '', scanExcludesPattern: '', scanIncludesPattern: '', scanName: '"${BUILD_NUMBER}"', teams: '', uploadIncludesPattern: '**/**.war', vid: "${VID}", vkey: "${VKEY}"       
+                    veracode applicationName: 'Java-VeraDemo', criticality: 'VeryHigh', deleteIncompleteScanLevel: '0', scanName: '"${BUILD_TIMESTAMP} - ${BUILD_NUMBER}"', uploadIncludesPattern: '**/**.war', vid: "${VID}", vkey: "${VKEY}"       
                 }
             }
         }
@@ -49,7 +49,8 @@ pipeline {
                     --veracode_api_id "${VID}" \
                     --veracode_api_key "${VKEY}" \
                     --file ${caminhoPacote} \
-                    --json_file baseline.json
+                    --json_output_file baseline.json
+                    --filtered_json_output_file results_filtered.json
                     || true """)
                 }
             }
